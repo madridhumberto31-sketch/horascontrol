@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Diagnóstico Firebase</title>
+    <style>
+        body { font-family: Arial; margin: 50px; }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+        .info { background: #d1ecf1; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Diagnóstico Firebase</h1>
+    
+    <div class="test info">
+        <h3>Test 1: Cargar Firebase SDK</h3>
+        <button onclick="test1()">Probar Carga de Firebase</button>
+        <div id="result1"></div>
+    </div>
+    
+    <div class="test info">
+        <h3>Test 2: Inicializar Firebase</h3>
+        <button onclick="test2()">Probar Inicialización</button>
+        <div id="result2"></div>
+    </div>
+    
+    <div class="test info">
+        <h3>Test 3: Conectar Auth</h3>
+        <button onclick="test3()">Probar Auth</button>
+        <div id="result3"></div>
+    </div>
+    
+    <div class="test info">
+        <h3>Test 4: Conectar Firestore</h3>
+        <button onclick="test4()">Probar Firestore</button>
+        <div id="result4"></div>
+    </div>
+
+    <script type="module">
+        let app, auth, db;
+        
+        // Test 1: Load Firebase SDK
+        window.test1 = async () => {
+            const result = document.getElementById('result1');
+            result.innerHTML = '🔄 Cargando Firebase SDK...';
+            
+            try {
+                const { initializeApp } = await import('https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js');
+                result.innerHTML = '✅ Firebase SDK cargado correctamente';
+                result.parentElement.className = 'test success';
+            } catch (error) {
+                result.innerHTML = `❌ Error cargando SDK: ${error.message}`;
+                result.parentElement.className = 'test error';
+            }
+        };
+        
+        // Test 2: Initialize Firebase
+        window.test2 = async () => {
+            const result = document.getElementById('result2');
+            result.innerHTML = '🔄 Inicializando Firebase...';
+            
+            try {
+                const { initializeApp } = await import('https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js');
+                
+                const firebaseConfig = {
+                    apiKey: "AIzaSyDQA1OcmqlJD1mDd5WtxINTBTOgQl4Wivo",
+                    authDomain: "horas-control.firebaseapp.com",
+                    projectId: "horas-control",
+                    storageBucket: "horas-control.firebasestorage.app",
+                    messagingSenderId: "1035784080509",
+                    appId: "1:1035784080509:web:a918e7bb3fdb1f4e187514"
+                };
+                
+                app = initializeApp(firebaseConfig);
+                result.innerHTML = '✅ Firebase inicializado correctamente';
+                result.parentElement.className = 'test success';
+                
+            } catch (error) {
+                result.innerHTML = `❌ Error inicializando: ${error.message}`;
+                result.parentElement.className = 'test error';
+            }
+        };
+        
+        // Test 3: Connect Auth
+        window.test3 = async () => {
+            const result = document.getElementById('result3');
+            result.innerHTML = '🔄 Conectando Auth...';
+            
+            try {
+                const { getAuth } = await import('https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js');
+                
+                if (!app) {
+                    throw new Error('Firebase no inicializado. Ejecuta Test 2 primero.');
+                }
+                
+                auth = getAuth(app);
+                result.innerHTML = '✅ Firebase Auth conectado correctamente';
+                result.parentElement.className = 'test success';
+                
+            } catch (error) {
+                result.innerHTML = `❌ Error conectando Auth: ${error.message}`;
+                result.parentElement.className = 'test error';
+            }
+        };
+        
+        // Test 4: Connect Firestore
+        window.test4 = async () => {
+            const result = document.getElementById('result4');
+            result.innerHTML = '🔄 Conectando Firestore...';
+            
+            try {
+                const { getFirestore, doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js');
+                
+                if (!app) {
+                    throw new Error('Firebase no inicializado. Ejecuta Test 2 primero.');
+                }
+                
+                db = getFirestore(app);
+                
+                // Try to read a test document
+                const testDoc = doc(db, 'test', 'connection');
+                const docSnap = await getDoc(testDoc);
+                
+                result.innerHTML = `✅ Firestore conectado correctamente. Test doc exists: ${docSnap.exists()}`;
+                result.parentElement.className = 'test success';
+                
+            } catch (error) {
+                result.innerHTML = `❌ Error conectando Firestore: ${error.message}<br>Código: ${error.code}`;
+                result.parentElement.className = 'test error';
+            }
+        };
+    </script>
+    
+    <hr>
+    <h2>📋 Información del Sistema</h2>
+    <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+    <p><strong>URL actual:</strong> <span id="currentUrl"></span></p>
+    <p><strong>Protocolo:</strong> <span id="protocol"></span></p>
+    
+    <script>
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        document.getElementById('currentUrl').textContent = window.location.href;
+        document.getElementById('protocol').textContent = window.location.protocol;
+    </script>
+    
+    <hr>
+    <h2>🔧 Posibles Soluciones</h2>
+    <div class="test info">
+        <h4>Si falla Test 1 (SDK):</h4>
+        <ul>
+            <li>Problema de conexión a internet</li>
+            <li>Firewall bloqueando CDN de Google</li>
+            <li>Antivirus bloqueando scripts</li>
+        </ul>
+        
+        <h4>Si falla Test 2 (Inicialización):</h4>
+        <ul>
+            <li>Configuración Firebase incorrecta</li>
+            <li>Proyecto Firebase deshabilitado</li>
+        </ul>
+        
+        <h4>Si falla Test 3 (Auth):</h4>
+        <ul>
+            <li>Firebase Authentication no habilitado</li>
+            <li>Dominio no autorizado</li>
+        </ul>
+        
+        <h4>Si falla Test 4 (Firestore):</h4>
+        <ul>
+            <li>Firestore Database no creado</li>
+            <li>Reglas muy restrictivas</li>
+            <li>Permisos insuficientes</li>
+        </ul>
+    </div>
+</body>
+</html>

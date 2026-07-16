@@ -1,0 +1,23 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users can read/write their own profile
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Users can create and manage their own class records
+    match /classes/{document} {
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow read: if request.auth != null && (
+        // Admins can read all class documents
+        request.auth.token.email in ['humbertoantoniomadridflores4@gmail.com', 'carlos.alexander.mezquita@clases.edu.sv'] ||
+        // Teachers can read their own class documents
+        (resource != null && resource.data.userId == request.auth.uid) ||
+        // Teachers can query their own class documents by userId
+        (request.resource == null && request.query.where('userId', '==', request.auth.uid))
+      );
+    }
+  }
+}

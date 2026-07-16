@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Horas - Profesores</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loader">
+            <i class="fas fa-graduation-cap"></i>
+            <p>Cargando sistema...</p>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="login-page hidden">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <i class="fas fa-school"></i>
+                    <h1>Control de Horas Académicas</h1>
+                    <p>Sistema para profesores y directores</p>
+                </div>
+                <div class="login-content">
+                    <button id="google-signin" class="google-btn">
+                        <i class="fab fa-google"></i>
+                        Iniciar sesión con Google
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Setup Page -->
+    <div id="setup-page" class="setup-page hidden">
+        <div class="setup-container">
+            <div class="setup-card">
+                <div class="setup-header">
+                    <h2>Configuración Inicial</h2>
+                    <p>Configure su información académica</p>
+                </div>
+                <form id="setup-form" class="setup-form">
+                    <div class="form-group">
+                        <label for="grade">Grado que enseña:</label>
+                        <select id="grade" required>
+                            <option value="">Seleccione un grado</option>
+                            <option value="1° Grado">1° Grado</option>
+                            <option value="2° Grado">2° Grado</option>
+                            <option value="3° Grado">3° Grado</option>
+                            <option value="4° Grado">4° Grado</option>
+                            <option value="5° Grado">5° Grado</option>
+                            <option value="6° Grado">6° Grado</option>
+                            <option value="7° Grado">7° Grado</option>
+                            <option value="8° Grado">8° Grado</option>
+                            <option value="9° Grado">9° Grado</option>
+                            <option value="1° Bachillerato">1° Bachillerato</option>
+                            <option value="2° Bachillerato">2° Bachillerato</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="section">Sección:</label>
+                        <select id="section" required>
+                            <option value="">Seleccione una sección</option>
+                            <option value="A">Sección A</option>
+                            <option value="B">Sección B</option>
+                            <option value="C">Sección C</option>
+                            <option value="D">Sección D</option>
+                        </select>
+                    </div>
+                    
+                    <div class="subjects-group">
+                        <label>Materias de clase que imparte:</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="matematica-clase" value="matematica">
+                                <span class="checkmark"></span>
+                                Matemática
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="lenguaje-clase" value="lenguaje">
+                                <span class="checkmark"></span>
+                                Lenguaje
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="subjects-group">
+                        <label>Materias de refuerzo que imparte:</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="matematica-refuerzo" value="matematica">
+                                <span class="checkmark"></span>
+                                Matemática
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="lenguaje-refuerzo" value="lenguaje">
+                                <span class="checkmark"></span>
+                                Lenguaje
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-save"></i>
+                        Guardar Configuración
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard hidden">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <i class="fas fa-clock"></i>
+                    <h1>Control de Horas</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <img id="user-photo" class="user-photo" alt="Usuario">
+                        <span id="user-name" class="user-name"></span>
+                    </div>
+                    <button id="logout-btn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Teacher Form (hidden for admins) -->
+            <div id="teacher-section" class="teacher-section">
+                <div class="form-card">
+                    <h2>Registro de Clases</h2>
+                    <form id="hours-form" class="hours-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="date-input">Fecha:</label>
+                                <input type="date" id="date-input" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group math-class-field" style="display: none;">
+                                <label for="math-classes">Clases de Matemática:</label>
+                                <input type="number" id="math-classes" min="0" max="400" step="1" placeholder="0">
+                            </div>
+                            <div class="form-group language-class-field" style="display: none;">
+                                <label for="language-classes">Clases de Lenguaje:</label>
+                                <input type="number" id="language-classes" min="0" max="400" step="1" placeholder="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group math-reinforcement-field" style="display: none;">
+                                <label for="math-reinforcement">Refuerzos de Matemática:</label>
+                                <input type="number" id="math-reinforcement" min="0" max="400" step="1" placeholder="0">
+                            </div>
+                            <div class="form-group language-reinforcement-field" style="display: none;">
+                                <label for="language-reinforcement">Refuerzos de Lenguaje:</label>
+                                <input type="number" id="language-reinforcement" min="0" max="400" step="1" placeholder="0">
+                            </div>
+                        </div>
+                        <button type="submit" class="add-classes-btn">
+                            <i class="fas fa-plus"></i>
+                            Registrar Clases
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Admin/Teacher Table -->
+            <div class="table-section">
+                <!-- Admin Panel (solo visible para admins) -->
+                <div id="admin-panel" style="display:none; margin-bottom:20px;">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3>Resumen de Profesores</h3>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="hours-table">
+                                <thead>
+                                    <tr>
+                                        <th>Profesor</th>
+                                        <th>Email</th>
+                                        <th>Grado</th>
+                                        <th>Sección</th>
+                                        <th>Total Clases</th>
+                                        <th>C. Matemática</th>
+                                        <th>C. Lenguaje</th>
+                                        <th>R. Matemática</th>
+                                        <th>R. Lenguaje</th>
+                                        <th>Entradas</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-summary-body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3 id="table-title">Mis Registros</h3>
+                        <div id="status-bar" style="margin-top:8px; font-size:0.95rem; color:#666;
+                            display:flex; gap:12px; align-items:center;">
+                            <span id="status-user"></span>
+                            <span id="status-role"></span>
+                            <span id="status-msg"></span>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="hours-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Profesor</th>
+                                    <th>Grado</th>
+                                    <th>Sección</th>
+                                    <th>C. Matemática</th>
+                                    <th>C. Lenguaje</th>
+                                    <th>R. Matemática</th>
+                                    <th>R. Lenguaje</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hours-table-body">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
