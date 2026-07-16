@@ -1,0 +1,10 @@
+{
+  "name": "control-horas",
+  "version": "1.0.0",
+  "description": "Sistema de control de horas para profesores",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Build complete'"
+  },
+  "type": "module"
+}
